@@ -47,6 +47,7 @@ CFLAGS      = -std=c17 \
 			-fomit-frame-pointer \
 			-ffreestanding \
 			-fstrict-volatile-bitfields \
+			-Wconversion \
 			-Iincludes
 LDFLAGS     = -T $(LINKER) -nostdlib
 

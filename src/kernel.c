@@ -1,4 +1,4 @@
-#include "vga.h"
+#include "term.h"
 
 #if defined(__linux__)
 #error "You are not using a cross-compiler, you will most certainly run into trouble"
@@ -11,5 +11,9 @@
 void kernel_main()
 {
     terminal_initialize();
-    terminal_writestring("Hello World, this is KFS-1, cpoulain branleur !\n");
+    terminal_putstr("Hello World, this is KFS-1, cpoulain branleur !\n");
+    terminal_putstr("Tiens tiens tiens, la newline marche, pas si branleur le cpoulain...\n");
+    terminal_putstr("HaAHHAHAHAHAHAHAHAHAHAHAHAHAHHHHHHHHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHHAHAHAHAAHHAHAHAHHAHAHAH");
+    terminal_putstr("\nMeme l'overflow est gere :)))");
+    terminal_putstr("\nBim le curseur !");
 }

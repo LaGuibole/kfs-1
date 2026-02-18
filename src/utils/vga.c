@@ -6,69 +6,67 @@
 /*   By: cpoulain <cpoulain@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/18 15:07:06 by cpoulain          #+#    #+#             */
-/*   Updated: 2026/02/18 15:34:06 by cpoulain         ###   ########.fr       */
+/*   Updated: 2026/02/18 18:23:16 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vga.h"
 
-static size_t      terminal_row;
-static size_t      terminal_column;
-static size_t      terminal_color;
-static u16*        terminal_buffer = (u16*)VGA_MEMORY;
+u16*         video_buffer = (u16*)VGA_MEMORY;
 
 static inline u8 vga_entry_color(t_vga_color fg, t_vga_color bg)
 {
-    return fg | bg << 4;
+    return (u8)fg | (u8)bg << 4;
 }
 
 static inline u16 vga_entry(unsigned char uc, u8 color)
 {
-    return (u16) uc | (u16) color << 8;
+    return (u16) uc | (u16)(color << 8);
 }
 
-void terminal_initialize()
+void    vga_reset_screen()
 {
-    terminal_row = 0;
-    terminal_column = 0;
-    terminal_color = vga_entry_color(VGA_COLOR_LIGHT_BROWN, VGA_COLOR_DARK_GREY);
-
-    for (size_t y = 0; y < VGA_HEIGHT; y++) {
-        for (size_t x = 0; x < VGA_WIDTH; x++) {
-            const size_t index = y * VGA_WIDTH + x;
-            terminal_buffer[index] = vga_entry(' ', terminal_color);
-        }
-    }
+    for (int i = 0; i < VGA_WIDTH * VGA_HEIGHT; ++i)
+        video_buffer[i] = VGA_DEFAULT_COLOR << 8 | VGA_BLANK_ENTRY;
+    vga_cursor_at(0, 0);
 }
 
-void terminal_setcolor(u8 color)
+void    vga_putchar_at(u8 x, u8 y, char c)
 {
-    terminal_color = color;
+    u16 vga_entry = video_buffer[y * VGA_WIDTH + x]; // Get the current entry at the position
+    vga_entry = (vga_entry & 0xFF00) | (u8)c; // Update only the character part, keep the color
+    video_buffer[y * VGA_WIDTH + x] = vga_entry; // Write the updated entry back to the buffer
 }
 
-void terminal_putentryat(char c, u8 color, size_t x, size_t y)
+void    vga_putchar_colored_at(u8 x, u8 y, char c, u8 color)
 {
-    const size_t index = y * VGA_WIDTH + x;
-    terminal_buffer[index] = vga_entry(c, color);
+    video_buffer[y * VGA_WIDTH + x] = vga_entry((u8)c, color); // Write the character with the specified color directly to the buffer
 }
 
-void terminal_putchar(char c)
+void    vga_enable_cursor(u8 cursor_start, u8 cursor_end)
 {
-    terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
-    if (++terminal_column == VGA_WIDTH) {
-        terminal_column = 0;
-        if (++terminal_row == VGA_HEIGHT)
-            terminal_row = 0;
-    }
+    outb(CURSOR_START_REG, REG_SELECT_PORT);
+    outb((inb(DATA_PORT) & CURSOR_START_MASK) | cursor_start, DATA_PORT);
+    outb(CURSOR_END_REG, REG_SELECT_PORT);
+    outb((inb(DATA_PORT) & CURSOR_END_MASK) | cursor_start, DATA_PORT);
 }
 
-void terminal_write(const char* data, size_t size)
+void    vga_cursor_at(u8 x, u8 y)
 {
-    for (size_t i = 0; i < size; i++)
-        terminal_putchar(data[i]);
+    x %= VGA_WIDTH;
+    y %= VGA_HEIGHT;
+
+    u16 new_pos = x + VGA_WIDTH * y;
+
+    outb(CURSOR_LOW_BYTE, REG_SELECT_PORT);
+    outb((u8) (new_pos & 0xFF), DATA_PORT);
+    outb(CURSOR_HIGH_BYTE, REG_SELECT_PORT);
+    outb((u8) ((new_pos >> 8) & 0xFF), DATA_PORT);
 }
 
-void terminal_writestring(const char* data)
+void    vga_scroll_down()
 {
-    terminal_write(data, strlen(data));
+    memmove(&video_buffer[0], &video_buffer[VGA_WIDTH], VGA_WIDTH * (VGA_HEIGHT - 1) *sizeof(u16));
+    for (int i = VGA_WIDTH * (VGA_HEIGHT - 1); i < VGA_WIDTH * VGA_HEIGHT; ++i)
+		video_buffer[i] = VGA_DEFAULT_COLOR << 8 | VGA_BLANK_ENTRY;
 }

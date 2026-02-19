@@ -1,4 +1,6 @@
 #include "gdt.h"
+#include "printk/printk.h"
+#include "asm/memory.h"
 
 extern void gdt_flush(u32 ptr);
 
@@ -32,4 +34,19 @@ void set_gdt_gate(u32 num, u32 base, u32 limit, u8 access, u8 gran)
 	gdt_entries[num].flags |= (gran & 0xF0);
 
 	gdt_entries[num].access = access;
+}
+
+void print_gdt_dump()
+{
+    struct gdt_ptr_struct gdtr_value;
+    __asm__ volatile ("sgdt %0" : "=m"(gdtr_value));
+    printk("GDT base: 0x%08x, limit: 0x%04x\n", KERNEL_PHYS(gdtr_value.base), gdtr_value.limit);
+	u8 *gdt = (u8 *)gdtr_value.base;
+    for (u16 i = 0; i < gdtr_value.limit + 1; i += 8) {
+        printk("GDT[%02d]: ", i / 8);
+        for (int j = 0; j < 8; j++) {
+            printk("%02x ", gdt[i + j]);
+        }
+        printk("\n");
+    }
 }

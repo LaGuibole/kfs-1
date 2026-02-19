@@ -24,5 +24,6 @@ struct gdt_ptr_struct
 
 void init_gdt();
 void set_gdt_gate(u32 num, u32 base, u32 limit, u8 access, u8 gran);
+void print_gdt_dump();
 
 # endif

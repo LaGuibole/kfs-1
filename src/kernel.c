@@ -24,4 +24,5 @@ void kernel_main()
     printk("VGA resolution: %dx%d\n", VGA_WIDTH, VGA_HEIGHT);
     printk("Kernel loaded at: %p\n", kernel_main);
     print_stack_dump(10);
+    print_gdt_dump();
 }

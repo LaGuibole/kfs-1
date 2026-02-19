@@ -1,25 +1,44 @@
+OUTPUT_FORMAT(elf32-i386)
 ENTRY(_start)
+
+_kernel_higher_half_offset = 0xC0000000;
+_kernel_physical_start = 0x00100000;
+_kernel_virtual_start = _kernel_physical_start + _kernel_higher_half_offset;
 
 SECTIONS
 {
-    . = 2M;
+    /* Place the multiboot header at the very start of the file (after ELF header) */
+    . = _kernel_physical_start;
 
-    .text BLOCK(4K) : ALIGN(4K)
+    .multiboot :
     {
-        *(.multiboot)
+        KEEP(*(.multiboot))
+    }
+
+    .bootstrap ALIGN(4K) : {
+        *(.bootstrap)
+    }
+
+    . = ALIGN(4K);
+    . += _kernel_higher_half_offset;
+
+    .text ALIGN(4K) : AT(ADDR(.text) - _kernel_higher_half_offset) {
         *(.text)
     }
-    .rodata BLOCK(4K) : ALIGN(4K)
-    {
+
+    .rodata ALIGN(4K) : AT(ADDR(.rodata) - _kernel_higher_half_offset) {
         *(.rodata)
     }
-    .data BLOCK(4K) : ALIGN(4K)
-    {
+
+    .bss ALIGN(4K) : AT(ADDR(.bss) - _kernel_higher_half_offset) {
+        *(.bss)
+        *(.COMMON)
+    }
+
+    .data ALIGN(4K) : AT(ADDR(.data) - _kernel_higher_half_offset) {
         *(.data)
     }
-    .bss BLOCK(4K) : ALIGN(4K)
-    {
-        *(COMMON)
-        *(.bss)
-    }
+
+    . = ALIGN(4K);
+    phys_kernel_end = . - _kernel_higher_half_offset;
 }

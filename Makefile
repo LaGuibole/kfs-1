@@ -23,13 +23,13 @@ LD          = $(TARGET)-ld
 
 KERNEL_OUT  = build/kfs.bin
 ISO_OUT     = build/kfs.iso
-BOOT        = src/boot.s
-
-# List all your C source files here
-SRC			:= $(wildcard src/*.c src/utils/*.c)
-OBJ			:= $(SRC:%.c=build/%.o)
-BOOT_OBJ	:= build/boot.o
 LINKER      = src/linker.ld
+
+SRC_C       := $(wildcard src/**/*.c src/*.c)
+SRC_S       := $(wildcard src/**/*.S src/*.S)
+OBJ_C       := $(SRC_C:%.c=build/%.o)
+OBJ_S       := $(SRC_S:%.S=build/%.o)
+OBJ         := build/src/multiboot_header.o $(filter-out build/src/multiboot_header.o, $(OBJ_S) $(OBJ_C))
 
 CFLAGS      = -std=c17 \
 			-fno-builtin \
@@ -48,6 +48,7 @@ CFLAGS      = -std=c17 \
 			-ffreestanding \
 			-fstrict-volatile-bitfields \
 			-Iincludes \
+			-Iincludes/asm \
 			-Wall \
 			-Wextra
 LDFLAGS     = -T $(LINKER) -nostdlib
@@ -59,14 +60,19 @@ all: build
 
 build: fclean $(KERNEL_OUT)
 
-$(KERNEL_OUT): $(BOOT_OBJ) $(OBJ)
+$(KERNEL_OUT): $(OBJ)
 	@echo "$(BOLD)$(YELLOW)[⚙] Linking kernel...$(RESET)"
-	@$(LD) $(LDFLAGS) -o $@ $(BOOT_OBJ) $(OBJ)
+	@$(LD) $(LDFLAGS) -o $@ $(OBJ)
 	@echo "$(BOLD)$(GREEN)[✓] KERNEL LINK DONE$(RESET)"
 
-$(BOOT_OBJ): $(BOOT)
+build/%.o: %.S
 	@mkdir -p $(dir $@)
-	@echo "$(BOLD)$(YELLOW)[⚙] Assembling boot.s...$(RESET)"
+	@echo "$(BOLD)$(YELLOW)[⚙] Assembling with preprocessor $<...$(RESET)"
+	@$(CC) $(CFLAGS) -c $< -o $@
+
+build/%.o: %.s
+	@mkdir -p $(dir $@)
+	@echo "$(BOLD)$(YELLOW)[⚙] Assembling $<...$(RESET)"
 	@$(AS) $< -o $@
 
 build/%.o: %.c
@@ -77,15 +83,20 @@ build/%.o: %.c
 build_debug: fclean
 	@echo "$(BOLD)$(YELLOW)[✓] KERNEL DEBUG MODE ON$(RESET)"
 	@mkdir -p build
-	@$(AS) $(BOOT) -o $(BOOT_OBJ)
-	@for src in $(SRC); do \
+	@for src in $(SRC_S); do \
+		obj=build/$${src%.S}.o; \
+		mkdir -p $$(dirname $$obj); \
+		echo "$(BOLD)$(YELLOW)[⚙] Assembling $$src...$(RESET)"; \
+		$(AS) $$src -o $$obj; \
+	done
+	@for src in $(SRC_C); do \
 		obj=build/$${src%.c}.o; \
 		mkdir -p $$(dirname $$obj); \
 		echo "$(BOLD)$(YELLOW)[⚙] Compiling $$src...$(RESET)"; \
 		$(CC) $(CFLAGS) -g -c $$src -o $$obj; \
 	done
 	@echo "$(BOLD)$(GREEN)[✓] KERNEL BUILD DONE$(RESET)"
-	@$(LD) $(LDFLAGS) -o $(KERNEL_OUT) $(BOOT_OBJ) $(OBJ)
+	@$(LD) $(LDFLAGS) -o $(KERNEL_OUT) $(OBJ)
 	@echo "$(BOLD)$(GREEN)[✓] KERNEL LINK DONE$(RESET)"
 
 run: build

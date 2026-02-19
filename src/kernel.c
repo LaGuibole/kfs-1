@@ -1,4 +1,8 @@
 #include "term.h"
+#include "asm/multiboot.h"
+
+extern void	init_gdt(void);
+extern int kernel_stack_top;
 
 #if defined(__linux__)
 #error "You are not using a cross-compiler, you will most certainly run into trouble"

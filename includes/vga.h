@@ -6,7 +6,7 @@
 /*   By: cpoulain <cpoulain@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/18 15:07:18 by cpoulain          #+#    #+#             */
-/*   Updated: 2026/02/18 15:33:59 by cpoulain         ###   ########.fr       */
+/*   Updated: 2026/02/18 18:23:51 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define VGA_H
 
 #include "string.h"
+#include "io.h"
+#include "mem.h"
 
 /* -------------------------------------------------------------------------- */
 /*                                  Constants                                 */
@@ -23,6 +25,9 @@
 #define VGA_HEIGHT          25
 #define VGA_MEMORY          0xB8000
 #define VGA_DEFAULT_COLOR   0x0F
+#define VGA_BLANK_ENTRY     0x00
+
+extern u16* video_buffer;
 
 typedef enum vga_color {
     VGA_COLOR_BLACK = 0,
@@ -47,11 +52,11 @@ typedef enum vga_color {
 /*                                  Functions                                 */
 /* -------------------------------------------------------------------------- */
 
-void terminal_initialize();
-void terminal_setcolor(u8 color);
-void terminal_putentryat(char c, u8 color, size_t x, size_t y);
-void terminal_putchar(char c);
-void terminal_write(const char* data, size_t size);
-void terminal_writestring(const char* data);
+void    vga_reset_screen();
+void    vga_putchar_at(u8 x, u8 y, char c);
+void    vga_putchar_colored_at(u8 x, u8 y, char c, u8 color);
+void    vga_enable_cursor(u8 cursor_start, u8 cursor_end);
+void    vga_cursor_at(u8 x, u8 y);
+void    vga_scroll_down();
 
 #endif

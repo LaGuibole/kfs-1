@@ -23,13 +23,13 @@ LD          = $(TARGET)-ld
 
 KERNEL_OUT  = build/kfs.bin
 ISO_OUT     = build/kfs.iso
-LINKER      = src/linker.ld
+LINKER      = src/boot/linker.ld
 
 SRC_C       := $(wildcard src/**/*.c src/*.c)
 SRC_S       := $(wildcard src/**/*.S src/*.S)
 OBJ_C       := $(SRC_C:%.c=build/%.o)
 OBJ_S       := $(SRC_S:%.S=build/%.o)
-OBJ         := build/src/multiboot_header.o $(filter-out build/src/multiboot_header.o, $(OBJ_S) $(OBJ_C))
+OBJ         := $(OBJ_S) $(OBJ_C)
 
 CFLAGS      = -std=c17 \
 			-fno-builtin \
@@ -80,31 +80,12 @@ build/%.o: %.c
 	@echo "$(BOLD)$(YELLOW)[⚙] Compiling $<...$(RESET)"
 	@$(CC) $(CFLAGS) -c $< -o $@
 
-build_debug: fclean
-	@echo "$(BOLD)$(YELLOW)[✓] KERNEL DEBUG MODE ON$(RESET)"
-	@mkdir -p build
-	@for src in $(SRC_S); do \
-		obj=build/$${src%.S}.o; \
-		mkdir -p $$(dirname $$obj); \
-		echo "$(BOLD)$(YELLOW)[⚙] Assembling $$src...$(RESET)"; \
-		$(AS) $$src -o $$obj; \
-	done
-	@for src in $(SRC_C); do \
-		obj=build/$${src%.c}.o; \
-		mkdir -p $$(dirname $$obj); \
-		echo "$(BOLD)$(YELLOW)[⚙] Compiling $$src...$(RESET)"; \
-		$(CC) $(CFLAGS) -g -c $$src -o $$obj; \
-	done
-	@echo "$(BOLD)$(GREEN)[✓] KERNEL BUILD DONE$(RESET)"
-	@$(LD) $(LDFLAGS) -o $(KERNEL_OUT) $(OBJ)
-	@echo "$(BOLD)$(GREEN)[✓] KERNEL LINK DONE$(RESET)"
-
-run: build
-	@qemu-system-i386 -kernel $(KERNEL_OUT) -monitor stdio
+run: iso
+	@qemu-system-i386 -cdrom $(ISO_OUT) -monitor stdio
 	@echo "\n$(BOLD)$(CYAN)[✓] KERNEL EXIT DONE$(RESET)"
 
-debug: build_debug
-	@qemu-system-i386 -kernel $(KERNEL_OUT) -s -S &
+debug: build
+	@qemu-system-i386 -cdrom $(ISO_OUT) -s -S &
 	@gdb -x .gdbinit
 	@echo "\n$(BOLD)$(CYAN)[✓] KERNEL DEBUG EXIT DONE$(RESET)"
 

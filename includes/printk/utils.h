@@ -6,7 +6,7 @@
 /*   By: cpoulain <cpoulain@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/19 14:38:55 by cpoulain          #+#    #+#             */
-/*   Updated: 2026/02/19 14:40:57 by cpoulain         ###   ########.fr       */
+/*   Updated: 2026/02/19 16:16:03 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,11 @@ int		string_printer(t_format *fmt, char *str);
 
 // Utils functions
 
-void	putnchar(char c, int count);
+void    printk_putchar(char c);
+void    printk_putnchar(char c, int count);
+int		printk_putstr(const char *str);
 int		max(int a, int b);
 int		min(int a, int b);
+int		isdigit(int c);
 
 #endif

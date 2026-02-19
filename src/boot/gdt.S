@@ -2,7 +2,6 @@
 .section .gdt, "a"
 .align 16
 
-
 /* -------------------------------------------------------------------------- */
 /*                       Global Descriptor Table Layout                       */
 /* -------------------------------------------------------------------------- */
@@ -17,15 +16,15 @@
 /* ------------------- 0x30: User stack segment (optional) ------------------ */
 
 gdt_start:
-	.quad 0x0000000000000000      /* Null descriptor (never used) */
+	.quad 0x0000000000000000		/* Null descriptor (never used) */
 
 gdt_kernel_code:
-	.word 0xFFFF                  /* Segment limit (low 16 bits) */
-	.word 0x0000                  /* Base address (low 16 bits) */
-	.byte 0x00                    /* Base address (next 8 bits) */
-	.byte GDT_ACCESS_KERNEL_CODE  /* Access byte (see gdt.h) */
-	.byte GDT_FLAGS_STANDARD      /* Flags (see gdt.h) */
-	.byte 0x00                    /* Base address (high 8 bits) */
+	.word 0xFFFF					/* Segment limit (low 16 bits) */
+	.word 0x0000					/* Base address (low 16 bits) */
+	.byte 0x00						/* Base address (next 8 bits) */
+	.byte GDT_ACCESS_KERNEL_CODE	/* Access byte (see gdt.h) */
+	.byte GDT_FLAGS_STANDARD		/* Flags (see gdt.h) */
+	.byte 0x00						/* Base address (high 8 bits) */
 
 gdt_kernel_data:
 	.word 0xFFFF
@@ -77,13 +76,13 @@ gdt_pointer:
 .section .text, "ax"
 
 init_gdt:
-	lgdt gdt_pointer
-	ljmp $0x8, $flush
+	lgdt gdt_pointer				/* Load the GDT register with the address and size of our GDT */
+	ljmp $0x8, $flush				/* Far jump to reload CS with the new GDT's code segment selector (0x8 = kernel code) */
 flush:
-	mov $0x10, %eax
-	mov %eax, %ds
-	mov %eax, %ss
-	mov %eax, %es
-	mov %eax, %fs
-	mov %eax, %gs
-	ret
+	mov $0x10, %eax           		/* 0x10 = kernel data segment selector */
+	mov %eax, %ds             		/* Reload DS with kernel data segment */
+	mov %eax, %ss             		/* Reload SS with kernel data segment */
+	mov %eax, %es             		/* Reload ES with kernel data segment */
+	mov %eax, %fs             		/* Reload FS with kernel data segment */
+	mov %eax, %gs             		/* Reload GS with kernel data segment */
+	ret                       		/* Return to caller (now running with new GDT) */

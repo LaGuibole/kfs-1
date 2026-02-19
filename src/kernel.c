@@ -2,6 +2,7 @@
 #include "asm/multiboot.h"
 #include "printk/printk.h"
 #include "dump.h"
+#include "gdt.h"
 
 extern void	init_gdt(void);
 extern int kernel_stack_top;
@@ -16,6 +17,7 @@ extern int kernel_stack_top;
 
 void kernel_main()
 {
+    init_gdt();
     terminal_initialize();
     printk("Welcome to KFS-1 kernel!\n");
     printk("Build date: %s %s\n", __DATE__, __TIME__);

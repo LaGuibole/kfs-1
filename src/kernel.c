@@ -14,7 +14,6 @@ extern int kernel_stack_top;
 
 void kernel_main()
 {
-    init_gdt();
     terminal_initialize();
     terminal_putstr("Hello World, this is KFS-1, cpoulain branleur !\n");
     terminal_putstr("Tiens tiens tiens, la newline marche, pas si branleur le cpoulain...\n");

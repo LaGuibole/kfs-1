@@ -25,8 +25,8 @@ KERNEL_OUT  = build/kfs.bin
 ISO_OUT     = build/kfs.iso
 LINKER      = src/boot/linker.ld
 
-SRC_C       := $(wildcard src/**/*.c src/*.c)
-SRC_S       := $(wildcard src/**/*.S src/*.S)
+SRC_C       := $(shell find src -name '*.c')
+SRC_S       := $(shell find src -name '*.S')
 OBJ_C       := $(SRC_C:%.c=build/%.o)
 OBJ_S       := $(SRC_S:%.S=build/%.o)
 OBJ         := $(OBJ_S) $(OBJ_C)

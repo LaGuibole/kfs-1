@@ -44,11 +44,9 @@ CFLAGS      = -std=c17 \
 			-mno-mmx \
 			-mno-80387 \
 			-fno-pic \
-			-fomit-frame-pointer \
 			-ffreestanding \
 			-fstrict-volatile-bitfields \
 			-Iincludes \
-			-Iincludes/asm \
 			-Wall \
 			-Wextra
 LDFLAGS     = -T $(LINKER) -nostdlib

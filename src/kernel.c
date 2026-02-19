@@ -1,5 +1,7 @@
 #include "term.h"
 #include "asm/multiboot.h"
+#include "printk/printk.h"
+#include "dump.h"
 #include "gdt.h"
 
 extern void	init_gdt(void);
@@ -17,9 +19,9 @@ void kernel_main()
 {
     init_gdt();
     terminal_initialize();
-    terminal_putstr("Hello World, this is KFS-1, cpoulain branleur !\n");
-    terminal_putstr("Tiens tiens tiens, la newline marche, pas si branleur le cpoulain...\n");
-    terminal_putstr("HaAHHAHAHAHAHAHAHAHAHAHAHAHAHHHHHHHHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHAHHAHAHAHAAHHAHAHAHHAHAHAH");
-    terminal_putstr("\nMeme l'overflow est gere :)))");
-    terminal_putstr("\nBim le curseur !");
+    printk("Welcome to KFS-1 kernel!\n");
+    printk("Build date: %s %s\n", __DATE__, __TIME__);
+    printk("VGA resolution: %dx%d\n", VGA_WIDTH, VGA_HEIGHT);
+    printk("Kernel loaded at: %p\n", kernel_main);
+    print_stack_dump(10);
 }

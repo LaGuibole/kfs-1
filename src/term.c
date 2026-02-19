@@ -6,7 +6,7 @@
 /*   By: cpoulain <cpoulain@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/18 17:17:20 by cpoulain          #+#    #+#             */
-/*   Updated: 2026/02/19 12:18:59 by cpoulain         ###   ########.fr       */
+/*   Updated: 2026/02/19 16:05:15 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,10 @@ int    terminal_putstr(const char *str)
     for (; str[i]; i++)
         terminal_putchar(str[i]);
     return (i);
+}
+
+void    terminal_putnchar(char c, int count)
+{
+    while (count--)
+        terminal_putchar(c);
 }

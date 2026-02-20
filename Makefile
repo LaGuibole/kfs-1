@@ -79,7 +79,7 @@ build/%.o: %.c
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 run: iso
-	@qemu-system-i386 -cdrom $(ISO_OUT) -monitor stdio
+	@qemu-system-i386 -cdrom $(ISO_OUT) -machine pc,accel=tcg -monitor stdio
 	@echo "\n$(BOLD)$(CYAN)[✓] KERNEL EXIT DONE$(RESET)"
 
 debug: build

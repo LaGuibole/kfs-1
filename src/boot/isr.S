@@ -1,7 +1,8 @@
+.code32
+
 .extern keyboard_handler
 .extern default_handler
 
-# generic handler as we only manage IRQ1(keyboard)
 .global isr_default
 isr_default:
     pusha
@@ -9,10 +10,11 @@ isr_default:
     popa
     iret
 
-# keyboard hadnler
 .global isr_keyboard
 isr_keyboard:
     pusha
+    subl $12, %esp      # align stack [test debug]
     call keyboard_handler
+    addl $12, %esp      # restore [debug tjrs on teste hein]
     popa
     iret

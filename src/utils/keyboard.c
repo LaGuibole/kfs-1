@@ -33,6 +33,3 @@ char keyboard_scancode_ascii(u8 scancode)
     char c = use_upper ? scancode_table_upper[scancode] : scancode_table_lower[scancode];
     return c;
 }
-
-
-

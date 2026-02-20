@@ -1,5 +1,3 @@
-.code 32
-
 .extern keyboard_handler
 .extern default_handler
 

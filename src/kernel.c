@@ -21,16 +21,15 @@ extern int kernel_stack_top;
 void kernel_main()
 {
     init_gdt();
+    terminal_initialize();
     pic_remap(0x20, 0x28);
     outb(0xFF, PIC_MASTER_DATA);
     outb(0xFF, PIC_SLAVE_DATA);
     init_idt();
     pic_unmask_irq(1);
-
+        
     __asm__ volatile ("sti");
-    for (;;) {
-        __asm__ volatile ("hlt");
-    }
-    terminal_initialize();
+    for (int i = 0; i < 100000; i++)
+        ;
     print_stack_dump();
 }

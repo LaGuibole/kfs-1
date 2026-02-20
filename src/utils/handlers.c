@@ -2,6 +2,7 @@
 #include "io.h"
 #include "keyboard.h"
 #include "term.h"
+#include "printk/printk.h"
 
 
 /*
@@ -19,8 +20,8 @@ void keyboard_handler()
     char c = keyboard_scancode_ascii(scancode);
     if (c != 0)
     {
-        if (c >= KEY_F1 && c <= KEY_F10)
-            terminal_switch_tab(c % KEY_F1);
+        if (scancode >= KEY_F1 && scancode <= KEY_F10)
+            terminal_switch_tab(c % 0xFFFFFFF0 - 1);
         else
             terminal_putchar(c);
     }

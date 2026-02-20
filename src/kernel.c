@@ -27,9 +27,9 @@ void kernel_main()
     outb(0xFF, PIC_SLAVE_DATA);
     init_idt();
     pic_unmask_irq(1);
-        
+
     __asm__ volatile ("sti");
-    for (int i = 0; i < 100000; i++)
-        ;
+    terminal_switch_tab(9);
     print_stack_dump();
+    terminal_switch_tab(0);
 }

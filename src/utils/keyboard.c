@@ -5,6 +5,7 @@
 
 static u8 shift_pressed = 0;
 static u8 caps_lock = 0;
+static u8 is_extended_scancode = 0;
 
 static const char scancode_table_lower[128] = {
 /*00*/  0,    0,    '1',  '2',  '3',  '4',  '5',  '6',
@@ -14,11 +15,11 @@ static const char scancode_table_lower[128] = {
 /*20*/  'd',  'f',  'g',  'h',  'j',  'k',  'l',  ';',
 /*28*/  '\'', '`',  0,    '\\', 'z',  'x',  'c',  'v',
 /*30*/  'b',  'n',  'm',  ',',  '.',  '/',  0,    '*',
-/*38*/  0,    ' ',  0,    KEY_F1,   KEY_F2,   KEY_F3,   KEY_F4,   KEY_F5,
-/*40*/  KEY_F6,   KEY_F7,   KEY_F8,   KEY_F9,   KEY_F10,  0,    0,    '7',
+/*38*/  0,    ' ',  0,    0xF0 + 1,   0xF0 + 2,   0xF0 + 3,   0xF0 + 4,   0xF0 + 5,
+/*40*/  0xF0 + 6,   0xF0 + 7,   0xF0 + 8,   0xF0 + 9,   0xF0 + 10,  0,    0,    '7',
 /*48*/  '8',  '9',  '-',  '4',  '5',  '6',  '+',  '1',
-/*50*/  '2',  '3',  '0',  '.',  0,    0,    0,    KEY_F11,
-/*58*/  KEY_F12,  0,    0,    0,    0,    0,    0,    0,
+/*50*/  '2',  '3',  '0',  '.',  0,    0,    0,    0,
+/*58*/  0,  0,    0,    0,    0,    0,    0,    0,
 /*60*/  0,    0,    0,    0,    0,    0,    0,    0,
 /*68*/  0,    0,    0,    0,    0,    0,    0,    0,
 /*70*/  0,    0,    0,    0,    0,    0,    0,    0,
@@ -33,11 +34,11 @@ static const char scancode_table_upper[128] = {
 /*20*/  'D',  'F',  'G',  'H',  'J',  'K',  'L',  ':',
 /*28*/  '"',  '~',  0,    '|',  'Z',  'X',  'C',  'V',
 /*30*/  'B',  'N',  'M',  '<',  '>',  '?',  0,    '*',
-/*38*/  0,    ' ',  0,    KEY_F1,   KEY_F2,   KEY_F3,   KEY_F4,   KEY_F5,
-/*40*/  KEY_F6,   KEY_F7,   KEY_F8,   KEY_F9,   KEY_F10,  0,    0,    '7',
+/*38*/  0,    ' ',  0,    0xF0 + 1,   0xF0 + 2,   0xF0 + 3,   0xF0 + 4,   0xF0 + 5,
+/*40*/  0xF0 + 6,   0xF0 + 7,   0xF0 + 8,   0xF0 + 9,   0xF0 + 10,  0,    0,    '7',
 /*48*/  '8',  '9',  '-',  '4',  '5',  '6',  '+',  '1',
-/*50*/  '2',  '3',  '0',  '.',  0,    0,    0,    KEY_F11,
-/*58*/  KEY_F12,  0,    0,    0,    0,    0,    0,    0,
+/*50*/  '2',  '3',  '0',  '.',  0,    0,    0,    0,
+/*58*/  0,  0,    0,    0,    0,    0,    0,    0,
 /*60*/  0,    0,    0,    0,    0,    0,    0,    0,
 /*68*/  0,    0,    0,    0,    0,    0,    0,    0,
 /*70*/  0,    0,    0,    0,    0,    0,    0,    0,
@@ -46,6 +47,18 @@ static const char scancode_table_upper[128] = {
 
 char keyboard_scancode_ascii(u8 scancode)
 {
+    if (scancode == 0xE0)
+    {
+        is_extended_scancode = 1;
+        return 0;
+    }
+
+    if (is_extended_scancode)
+    {
+        is_extended_scancode = 0;
+        return 0;
+    }
+
     if (scancode & 0x80)
     {
         u8 released = scancode & 0x7F; // take off bit 7

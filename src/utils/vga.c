@@ -6,7 +6,7 @@
 /*   By: cpoulain <cpoulain@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/18 15:07:06 by cpoulain          #+#    #+#             */
-/*   Updated: 2026/02/18 18:23:16 by cpoulain         ###   ########.fr       */
+/*   Updated: 2026/02/20 15:59:29 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 u16*         video_buffer = (u16*)VGA_MEMORY;
 
-static inline u8 vga_entry_color(t_vga_color fg, t_vga_color bg)
+u8 vga_entry_color(t_vga_color fg, t_vga_color bg)
 {
     return (u8)fg | (u8)bg << 4;
 }
 
-static inline u16 vga_entry(unsigned char uc, u8 color)
+u16 vga_entry(unsigned char uc, u8 color)
 {
     return (u16) uc | (u16)(color << 8);
 }
@@ -48,7 +48,7 @@ void    vga_enable_cursor(u8 cursor_start, u8 cursor_end)
     outb(CURSOR_START_REG, REG_SELECT_PORT);
     outb((inb(DATA_PORT) & CURSOR_START_MASK) | cursor_start, DATA_PORT);
     outb(CURSOR_END_REG, REG_SELECT_PORT);
-    outb((inb(DATA_PORT) & CURSOR_END_MASK) | cursor_start, DATA_PORT);
+    outb((inb(DATA_PORT) & CURSOR_END_MASK) | cursor_end, DATA_PORT);
 }
 
 void    vga_cursor_at(u8 x, u8 y)
@@ -66,7 +66,7 @@ void    vga_cursor_at(u8 x, u8 y)
 
 void    vga_scroll_down()
 {
-    memmove(&video_buffer[0], &video_buffer[VGA_WIDTH], VGA_WIDTH * (VGA_HEIGHT - 1) *sizeof(u16));
+    memmove(&video_buffer[VGA_WIDTH], &video_buffer[VGA_WIDTH * 2], VGA_WIDTH * (VGA_HEIGHT - 2) * sizeof(u16));
     for (int i = VGA_WIDTH * (VGA_HEIGHT - 1); i < VGA_WIDTH * VGA_HEIGHT; ++i)
-		video_buffer[i] = VGA_DEFAULT_COLOR << 8 | VGA_BLANK_ENTRY;
+        video_buffer[i] = VGA_DEFAULT_COLOR << 8 | VGA_BLANK_ENTRY;
 }

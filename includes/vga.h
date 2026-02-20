@@ -6,7 +6,7 @@
 /*   By: cpoulain <cpoulain@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/18 15:07:18 by cpoulain          #+#    #+#             */
-/*   Updated: 2026/02/18 18:23:51 by cpoulain         ###   ########.fr       */
+/*   Updated: 2026/02/20 13:01:33 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,5 +58,7 @@ void    vga_putchar_colored_at(u8 x, u8 y, char c, u8 color);
 void    vga_enable_cursor(u8 cursor_start, u8 cursor_end);
 void    vga_cursor_at(u8 x, u8 y);
 void    vga_scroll_down();
+u8      vga_entry_color(t_vga_color fg, t_vga_color bg);
+u16     vga_entry(unsigned char uc, u8 color);
 
 #endif

@@ -19,4 +19,5 @@ void kernel_main()
 {
     init_gdt();
     terminal_initialize();
+    print_stack_dump();
 }

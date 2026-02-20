@@ -6,7 +6,7 @@
 /*   By: cpoulain <cpoulain@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/18 17:17:20 by cpoulain          #+#    #+#             */
-/*   Updated: 2026/02/20 16:44:22 by cpoulain         ###   ########.fr       */
+/*   Updated: 2026/02/20 16:50:16 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,6 @@ void terminal_initialize()
     tab_initialize();
     terminal_reset();
     terminal_dump_tab();
-    print_stack_dump();
 }
 
 void terminal_reset()

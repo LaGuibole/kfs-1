@@ -18,7 +18,12 @@ void keyboard_handler()
     
     char c = keyboard_scancode_ascii(scancode);
     if (c != 0)
-        terminal_putchar(c);
+    {
+        if (c >= KEY_F1 && c <= KEY_F10)
+            terminal_switch_tab(c % KEY_F1);
+        else
+            terminal_putchar(c);
+    }
     pic_send_eoi(1); // IRQ1 => send EOI on PIC master
 }
 

@@ -3,6 +3,9 @@
 #include "printk/printk.h"
 #include "dump.h"
 #include "gdt.h"
+#include "io.h"
+#include "pic.h"
+#include "idt.h"
 
 extern void	init_gdt(void);
 extern int kernel_stack_top;
@@ -18,6 +21,16 @@ extern int kernel_stack_top;
 void kernel_main()
 {
     init_gdt();
+    pic_remap(0x20, 0x28);
+    outb(0xFF, PIC_MASTER_DATA);
+    outb(0xFF, PIC_SLAVE_DATA);
+    init_idt();
+    pic_unmask_irq(1);
+
+    __asm__ volatile ("sti");
+    for (;;) {
+        __asm__ volatile ("hlt");
+    }
     terminal_initialize();
     print_stack_dump();
 }

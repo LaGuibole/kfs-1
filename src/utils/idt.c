@@ -27,7 +27,7 @@ void idt_set_gate(u8 num, u32 handler, u16 selector, u8 flags)
 		3 - Plug the keyboard handler on INT 0x21
 		4 - Load IDT into IDTR register
 */
-void idt_init()
+void init_idt()
 {
 	//step 1
 	idt_ptr.limit = (sizeof(idt_entry_t) * IDT_ENTRIES) - 1;

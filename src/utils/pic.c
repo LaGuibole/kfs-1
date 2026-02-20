@@ -11,7 +11,7 @@
 */
 static void io_wait()
 {
-	outb(0x80, 0);
+	outb(0, 0x80);
 }
 
 /*
@@ -29,24 +29,24 @@ static void io_wait()
 */
 void pic_remap(u8 master_offset, u8 slave_offset)
 {
-	// step 1 
+	//step 1
 	u8 master_mask = inb(PIC_MASTER_DATA);
 	u8 slave_mask = inb(PIC_SLAVE_DATA);
 	// step 2
-	outb(PIC_MASTER_CMD, ICW1_INIT); io_wait();
-	outb(PIC_SLAVE_CMD, ICW1_INIT); io_wait();
+	outb(ICW1_INIT, PIC_MASTER_CMD); io_wait();
+	outb(ICW1_INIT, PIC_SLAVE_CMD);  io_wait();
 	// step 3
-	outb(PIC_MASTER_DATA, master_offset); io_wait();
-	outb(PIC_SLAVE_DATA, slave_offset); io_wait();
+	outb(master_offset, PIC_MASTER_DATA); io_wait();
+	outb(slave_offset,  PIC_SLAVE_DATA);  io_wait();
 	// step 4
-	outb(PIC_MASTER_DATA, 0x04); io_wait();
-	outb(PIC_SLAVE_DATA, 0x02); io_wait();
+	outb(0x04, PIC_MASTER_DATA); io_wait();
+	outb(0x02, PIC_SLAVE_DATA);  io_wait();
 	// step 5
-	outb(PIC_MASTER_DATA, ICW4_8086); io_wait();
-	outb(PIC_SLAVE_DATA, ICW4_8086); io_wait();
+	outb(ICW4_8086, PIC_MASTER_DATA); io_wait();
+	outb(ICW4_8086, PIC_SLAVE_DATA);  io_wait();
 	// step 6
-	outb(PIC_MASTER_DATA, master_mask);
-	outb(PIC_SLAVE_DATA, slave_mask);
+	outb(master_mask, PIC_MASTER_DATA);
+	outb(slave_mask,  PIC_SLAVE_DATA);
 }
 
 /*
@@ -58,8 +58,8 @@ void pic_remap(u8 master_offset, u8 slave_offset)
 void pic_send_eoi(u8 irq)
 {
 	if (irq >= 8)
-		outb(PIC_SLAVE_CMD, 0x20);
-	outb(PIC_MASTER_CMD, 0x20);
+		outb(0x20, PIC_SLAVE_CMD);
+	outb(0x20, PIC_MASTER_CMD);
 }
 
 /*
@@ -78,7 +78,7 @@ void pic_mask_irq(u8 irq)
 		irq -= 8;
 	}
 	value = inb(port) | (1 << irq);
-	outb(port, value);
+	outb(value, port);
 }
 
 /*
@@ -97,5 +97,5 @@ void pic_unmask_irq(u8 irq)
 		irq -= 8;
 	}
 	value = inb(port) & ~(1 << irq);
-	outb(port, value);
+	outb(value, port);
 }

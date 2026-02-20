@@ -21,3 +21,4 @@ void keyboard_handler()
         terminal_putchar(c);
     pic_send_eoi(1); // IRQ1 => send EOI on PIC master
 }
+

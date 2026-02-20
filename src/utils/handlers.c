@@ -22,6 +22,8 @@ void keyboard_handler()
     {
         if (scancode >= KEY_F1 && scancode <= KEY_F10)
             terminal_switch_tab(c % 0xFFFFFFF0 - 1);
+        else if (c == '\b')
+            terminal_backspace();
         else
             terminal_putchar(c);
     }

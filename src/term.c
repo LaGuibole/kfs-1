@@ -57,7 +57,7 @@ void terminal_dump_tab()
 
     for (y = 1; y < VGA_HEIGHT; ++y)
         for (x = 0; x < VGA_WIDTH; ++x)
-            vga_putchar_colored_at(x, y, ' ', VGA_DEFAULT_COLOR);
+            vga_putchar_colored_at(x, y, VGA_BLANK_ENTRY, VGA_DEFAULT_COLOR);
     terminal_printheader();
     for (y = 1; y < VGA_HEIGHT; ++y)
     {
@@ -120,7 +120,7 @@ void terminal_printheader()
     terminal_putstr_colored(headers[selected_tab]);
 
     tabs[selected_tab].cursor_x = saved_x;
-    tabs[selected_tab].cursor_y = saved_y ? saved_y : 1;
+    // tabs[selected_tab].cursor_y = saved_y ? saved_y : 1;
     vga_cursor_at(tabs[selected_tab].cursor_x, tabs[selected_tab].cursor_y);
 }
 
@@ -214,4 +214,25 @@ void terminal_putnchar(char c, int count)
 {
     while (count--)
         terminal_putchar(c);
+}
+
+void terminal_backspace()
+{
+    int i;
+    if (tabs[selected_tab].cursor_x == 0 && tabs[selected_tab].cursor_y <= 1)
+        return ;
+    if (tabs[selected_tab].cursor_x == 0)
+    {
+        --tabs[selected_tab].cursor_y;
+        for (i = 0; tabs[selected_tab].tab_buffer[tabs[selected_tab].cursor_y][i] == VGA_BLANK_ENTRY; i++)
+            ;
+        for (i = 0; tabs[selected_tab].tab_buffer[tabs[selected_tab].cursor_y][i] != VGA_BLANK_ENTRY; i++)
+            ; 
+        tabs[selected_tab].cursor_x = (i - 1) % VGA_WIDTH;
+    }
+    else
+        --tabs[selected_tab].cursor_x;
+    tabs[selected_tab].tab_buffer[tabs[selected_tab].cursor_y][tabs[selected_tab].cursor_x] = vga_entry(VGA_BLANK_ENTRY, VGA_DEFAULT_COLOR);
+    vga_putchar_colored_at(tabs[selected_tab].cursor_x, tabs[selected_tab].cursor_y, VGA_BLANK_ENTRY, VGA_DEFAULT_COLOR);
+    vga_cursor_at(tabs[selected_tab].cursor_x, tabs[selected_tab].cursor_y);
 }

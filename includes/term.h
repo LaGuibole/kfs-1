@@ -41,5 +41,6 @@ void    terminal_printheader();
 void    terminal_dump_tab();
 void    terminal_putchar_colored_at(u8 x, u8 y, char c, u8 color);
 void    terminal_scroll_down_buffer();
+void    terminal_backspace();
 
 #endif

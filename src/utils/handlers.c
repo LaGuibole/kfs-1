@@ -1,5 +1,7 @@
 #include "pic.h"
 #include "io.h"
+#include "keyboard.h"
+#include "term.h"
 
 
 /*
@@ -13,6 +15,9 @@ void default_handler()
 void keyboard_handler()
 {
     u8 scancode = inb(0x60);
-    // todo : traduire le scandoe 
+    
+    char c = keyboard_scancode_ascii(scancode);
+    if (c != 0)
+        terminal_putchar(c);
     pic_send_eoi(1); // IRQ1 => send EOI on PIC master
 }

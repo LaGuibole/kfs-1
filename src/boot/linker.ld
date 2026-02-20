@@ -7,6 +7,11 @@ _kernel_virtual_start = _kernel_physical_start + _kernel_higher_half_offset; /* 
 
 /* Section layout for the kernel binary */
 SECTIONS {
+    . = 0x800;
+    .gdt : {
+        KEEP(*(.gdt))
+    }
+
     . = _kernel_physical_start;   /* Move location counter to kernel physical start (1 MiB) */
 
     .bootstrap ALIGN(4K) : {      /* Bootstrap section, page-aligned */

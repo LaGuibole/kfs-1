@@ -19,10 +19,4 @@ void kernel_main()
 {
     init_gdt();
     terminal_initialize();
-    printk("Welcome to KFS-1 kernel!\n");
-    printk("Build date: %s %s\n", __DATE__, __TIME__);
-    printk("VGA resolution: %dx%d\n", VGA_WIDTH, VGA_HEIGHT);
-    printk("Kernel loaded at: %p\n", kernel_main);
-    print_stack_dump(10);
-    print_gdt_dump();
 }

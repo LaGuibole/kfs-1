@@ -6,13 +6,13 @@
 /*   By: cpoulain <cpoulain@student.42lehavre.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/19 16:30:33 by cpoulain          #+#    #+#             */
-/*   Updated: 2026/02/19 16:30:50 by cpoulain         ###   ########.fr       */
+/*   Updated: 2026/02/20 16:42:51 by cpoulain         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef DUMP_H
 #define DUMP_H
 
-void print_stack_dump(int max_frames);
+void print_stack_dump();
 
 #endif

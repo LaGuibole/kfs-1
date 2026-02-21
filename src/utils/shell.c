@@ -11,6 +11,7 @@ static const t_cmd g_commands[] = {
 	{ "tabs", cmd_tabs },
 	{ "dump", cmd_dump },
 	{ "gdt", cmd_gdt },
+	{ "troll", cmd_troll },
 	{ NULL, NULL },
 };
 
@@ -91,6 +92,7 @@ void cmd_help(char **args, int argc)
 	terminal_putstr("    tabs    - Show tab info\n");
 	terminal_putstr("    gdt     - Print GDT Table\n");
 	terminal_putstr("    dump    - Print Stack Dump\n");
+	terminal_putstr("    troll   - Surprise :D\n");
 }
 
 void cmd_clear(char **args, int argc)
@@ -140,4 +142,38 @@ void cmd_gdt(char **args, int argc)
 	(void)args;
 	(void)argc;
 	print_gdt_dump();
+}
+
+void cmd_troll(char **args, int argc)
+{
+    (void)args; (void)argc;
+    terminal_putstr("                    _____\n");
+    terminal_putstr("                 ,-'     `._\n");
+    terminal_putstr("               ,'           `.        ,-.\n");
+    terminal_putstr("             ,'               \\       ),.\\\n");
+    terminal_putstr("   ,.       /                  \\     /(  \\;\n");
+    terminal_putstr("  /'\\\\     ,o.        ,ooooo.   \\  ,'  `-')\n");
+    terminal_putstr("  )) )`. d8P\"Y8.    ,8P\"\"\"\"\"Y8.  `'  .--\"'\n");
+    terminal_putstr(" (`-'   `Y'  `Y8    dP       `'     /\n");
+    terminal_putstr("  `----.(   __ `    ,' ,---.       (\n");
+    terminal_putstr("         ),--.`.   (  ;,---.        )\n");
+    terminal_putstr("        / \\O_,' )   \\  \\O_,'        |\n");
+    terminal_putstr("       ;  `-- ,'       `---'        |\n");
+    terminal_putstr("       |    -'         `.           |\n");
+    terminal_putstr("      _;    ,            )          :\n");
+    terminal_putstr("   _.'|     `.:._   ,.:\" `..        |\n");
+    terminal_putstr("--'   |   .'     \"\"\"         `      |`.\n");
+    terminal_putstr("      |  :;      :   :     _.       |`.`.-'--.\n");
+    terminal_putstr("      |  ' .     :   :__.,'|/       |  \\\n");
+    terminal_putstr("      `     \\--.__.-'|_|_|-/        /   )\n");
+    terminal_putstr("       \\     \\_   `--^\"__,'        ,    |\n");
+    terminal_putstr("       ;  `    `--^---'          ,'     |\n");
+    terminal_putstr("        \\  `                    /      /\n");
+    terminal_putstr("         \\   `    _ _          /\n");
+    terminal_putstr("          \\           `       /\n");
+    terminal_putstr("           \\           '    ,'\n");
+    terminal_putstr("            `.       ,   _,'\n");
+    terminal_putstr("              `-.___.---'\n");
+    terminal_putstr("\n");
+    terminal_putstr("  Somebody once told me the world is gonna roll me...\n");
 }

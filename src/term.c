@@ -142,6 +142,7 @@ void terminal_initialize()
 {
     tab_initialize();
     terminal_reset();
+    vga_enable_cursor(0,15);
     terminal_dump_tab();
 }
 

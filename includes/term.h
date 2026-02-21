@@ -14,6 +14,7 @@
 # define TERM_H
 
 #include "vga.h"
+#include "shell.h"
 
 #define TERM_TAB_COUNT  10
 #define PROMPT          "cgpoulipOS >  "  
@@ -23,7 +24,8 @@ typedef struct s_tabs
 	u8  cursor_x;
 	u8  cursor_y;
 	u16 tab_buffer[VGA_HEIGHT][VGA_WIDTH];
-	// u8 input_buffer[] to come ;
+	u8 input_buffer[INPUT_BUFFER_SIZE];
+	u16 input_len;
 	u8  prompt_start_x;
 	u8  prompt_start_y;
 }   t_tabs;

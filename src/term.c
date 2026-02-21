@@ -217,19 +217,42 @@ void terminal_putnchar(char c, int count)
         terminal_putchar(c);
 }
 
+// void terminal_backspace()
+// {
+//     int i;
+//     if (tabs[selected_tab].cursor_x == 0 && tabs[selected_tab].cursor_y <= 1)
+//         return ;
+//     if (tabs[selected_tab].cursor_x == 0)
+//     {
+//         --tabs[selected_tab].cursor_y;
+//         for (i = 0; tabs[selected_tab].tab_buffer[tabs[selected_tab].cursor_y][i] == VGA_BLANK_ENTRY; i++)
+//             ;
+//         for (i = 0; tabs[selected_tab].tab_buffer[tabs[selected_tab].cursor_y][i] != VGA_BLANK_ENTRY; i++)
+//             ; 
+//         tabs[selected_tab].cursor_x = (i - 1) % VGA_WIDTH;
+//     }
+//     else
+//         --tabs[selected_tab].cursor_x;
+//     tabs[selected_tab].tab_buffer[tabs[selected_tab].cursor_y][tabs[selected_tab].cursor_x] = vga_entry(VGA_BLANK_ENTRY, VGA_DEFAULT_COLOR);
+//     vga_putchar_colored_at(tabs[selected_tab].cursor_x, tabs[selected_tab].cursor_y, VGA_BLANK_ENTRY, VGA_DEFAULT_COLOR);
+//     vga_cursor_at(tabs[selected_tab].cursor_x, tabs[selected_tab].cursor_y);
+// }
+
 void terminal_backspace()
 {
-    int i;
     if (tabs[selected_tab].cursor_x == 0 && tabs[selected_tab].cursor_y <= 1)
-        return ;
+        return;
+
     if (tabs[selected_tab].cursor_x == 0)
     {
         --tabs[selected_tab].cursor_y;
-        for (i = 0; tabs[selected_tab].tab_buffer[tabs[selected_tab].cursor_y][i] == VGA_BLANK_ENTRY; i++)
-            ;
-        for (i = 0; tabs[selected_tab].tab_buffer[tabs[selected_tab].cursor_y][i] != VGA_BLANK_ENTRY; i++)
-            ; 
-        tabs[selected_tab].cursor_x = (i - 1) % VGA_WIDTH;
+        int last_x = VGA_WIDTH - 1;
+        while (last_x > 0 && (tabs[selected_tab].tab_buffer[tabs[selected_tab].cursor_y][last_x] & 0xFF) == VGA_BLANK_ENTRY)
+            --last_x;
+        if ((tabs[selected_tab].tab_buffer[tabs[selected_tab].cursor_y][last_x] & 0xFF) == VGA_BLANK_ENTRY)
+            tabs[selected_tab].cursor_x = 0;
+        else
+            tabs[selected_tab].cursor_x = last_x;
     }
     else
         --tabs[selected_tab].cursor_x;

@@ -120,7 +120,7 @@ void terminal_printheader()
     terminal_putstr_colored(headers[selected_tab]);
 
     tabs[selected_tab].cursor_x = saved_x;
-    // tabs[selected_tab].cursor_y = saved_y ? saved_y : 1;
+    tabs[selected_tab].cursor_y = saved_y ? saved_y : 1;
     vga_cursor_at(tabs[selected_tab].cursor_x, tabs[selected_tab].cursor_y);
 }
 

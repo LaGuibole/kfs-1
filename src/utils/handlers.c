@@ -24,6 +24,11 @@ void keyboard_handler()
             terminal_switch_tab(c % 0xFFFFFFF0 - 1);    
         else if (c == '\b')
             terminal_backspace();
+        else if (c == '\n')
+        {
+            terminal_putchar(c);
+            terminal_prompt();
+        }
         else
             terminal_putchar(c);
     }

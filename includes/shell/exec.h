@@ -1,15 +1,5 @@
-#ifndef SHELL_H
-# define SHELL_H
-
-#include "types.h"
-
-#define INPUT_BUFFER_SIZE   242
-
-typedef struct s_cmd 
-{
-    const char  *name;
-    void        (*handler)(char **args, int argc);
-} t_cmd;
+#ifndef EXEC_H
+# define EXEC_H
 
 void cmd_help(char **args, int argc);
 void cmd_clear(char **args, int argc);

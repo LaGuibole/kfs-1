@@ -1,6 +1,6 @@
 #include "idt.h"
 #include "printk/printk.h"
-#include "term.h"
+#include "shell/term.h"
 
 static idt_entry_t  idt[IDT_ENTRIES];
 static idt_ptr_t    idt_ptr;

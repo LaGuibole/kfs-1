@@ -1,9 +1,9 @@
 #include "pic.h"
 #include "io.h"
 #include "keyboard.h"
-#include "term.h"
+#include "shell/exec.h"
+#include "shell/tabs.h"
 #include "printk/printk.h"
-#include "shell.h"
 
 
 /*
@@ -22,7 +22,7 @@ void default_handler()
 //     if (c != 0)
 //     {
 //         if (scancode >= KEY_F1 && scancode <= KEY_F10)
-//             terminal_switch_tab(c % 0xFFFFFFF0 - 1);    
+//             tab_switch(c % 0xFFFFFFF0 - 1);    
 //         else if (c == '\b')
 //             terminal_backspace();
 //         else if (c == '\n')
@@ -45,7 +45,7 @@ void keyboard_handler()
     if (c != 0)
     {
         if (scancode >= KEY_F1 && scancode <= KEY_F10)
-            terminal_switch_tab(c % 0xFFFFFFF0 - 1);    
+            tab_switch(c % 0xFFFFFFF0 - 1);    
         else if (c == '\b')
         {
             if (tabs[selected_tab].input_len > 0)

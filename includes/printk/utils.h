@@ -84,4 +84,6 @@ int		max(int a, int b);
 int		min(int a, int b);
 int		isdigit(int c);
 
+int kstrcmp(const char *s1, const char *s2);
+
 #endif

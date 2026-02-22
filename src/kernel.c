@@ -6,6 +6,7 @@
 #include "io.h"
 #include "pic.h"
 #include "idt.h"
+#include "shell.h"
 
 extern void	init_gdt(void);
 extern int kernel_stack_top;
@@ -32,4 +33,5 @@ void kernel_main()
     terminal_switch_tab(9);
     print_stack_dump();
     terminal_switch_tab(0);
+    shell_exec("help");
 }

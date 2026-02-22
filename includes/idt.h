@@ -4,6 +4,7 @@
 #include "types.h"
 
 #define IDT_ENTRIES 256
+#define IDT_PRINT_MAX 15
 
 /*
 	Structure for 1 IDT Entry (8 bytes)
@@ -26,5 +27,5 @@ typedef struct {
 
 void init_idt();
 void set_idt_gate(u8 num, u32 handler, u16 selector, u8 flags);
-
+void print_idt();
 #endif

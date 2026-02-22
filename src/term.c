@@ -120,7 +120,7 @@ void terminal_printheader()
     terminal_putstr_colored(headers[selected_tab]);
 
     tabs[selected_tab].cursor_x = saved_x;
-    // tabs[selected_tab].cursor_y = saved_y ? saved_y : 1;
+    tabs[selected_tab].cursor_y = saved_y ? saved_y : 1;
     vga_cursor_at(tabs[selected_tab].cursor_x, tabs[selected_tab].cursor_y);
 }
 
@@ -144,6 +144,19 @@ void terminal_initialize()
     terminal_reset();
     vga_enable_cursor(0,15);
     terminal_dump_tab();
+    terminal_putchar('\n');
+    terminal_putstr(" 444444      22222222           OOOOOOOOO    SSSSSSSSS  \n");
+    terminal_putstr(" 444444      22222222          OOOOOOOOOOO   SSSSSSSSS  \n");
+    terminal_putstr("444   444   222     222       OOO       OOO SSS         \n");
+    terminal_putstr("444   444           222       OOO       OOO SSS         \n");
+    terminal_putstr("444444444444     222222       OOO       OOO  SSSSSSS    \n");
+    terminal_putstr("444444444444     222222       OOO       OOO   SSSSSSS   \n");
+    terminal_putstr("      444        222          OOO       OOO        SSS  \n");
+    terminal_putstr("      444      222            OOO       OOO        SSS  \n");
+    terminal_putstr("      444     222222222        OOOOOOOOOOO   SSSSSSSSS  \n");
+    terminal_putstr("      444     222222222         OOOOOOOOO    SSSSSSSSS  \n");
+    terminal_putchar('\n');
+    terminal_prompt();
 }
 
 void terminal_reset()
@@ -243,6 +256,10 @@ void terminal_backspace()
     if (tabs[selected_tab].cursor_x == 0 && tabs[selected_tab].cursor_y <= 1)
         return;
 
+    if (tabs[selected_tab].cursor_x == tabs[selected_tab].prompt_start_x
+            && tabs[selected_tab].cursor_y == tabs[selected_tab].prompt_start_y)
+            return;
+
     if (tabs[selected_tab].cursor_x == 0)
     {
         --tabs[selected_tab].cursor_y;
@@ -259,4 +276,13 @@ void terminal_backspace()
     tabs[selected_tab].tab_buffer[tabs[selected_tab].cursor_y][tabs[selected_tab].cursor_x] = vga_entry(VGA_BLANK_ENTRY, VGA_DEFAULT_COLOR);
     vga_putchar_colored_at(tabs[selected_tab].cursor_x, tabs[selected_tab].cursor_y, VGA_BLANK_ENTRY, VGA_DEFAULT_COLOR);
     vga_cursor_at(tabs[selected_tab].cursor_x, tabs[selected_tab].cursor_y);
+}
+
+void terminal_prompt()
+{
+    int i = 0;
+    while (PROMPT[i])
+        terminal_putchar_colored(PROMPT[i++], VGA_COLOR_GREEN);
+    tabs[selected_tab].prompt_start_x = tabs[selected_tab].cursor_x;
+    tabs[selected_tab].prompt_start_y = tabs[selected_tab].cursor_y;
 }

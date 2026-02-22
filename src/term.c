@@ -34,6 +34,8 @@ void terminal_switch_tab(u8 new_tab)
 
     selected_tab = new_tab;
     terminal_dump_tab();
+    if (tabs[selected_tab].tab_buffer[tabs[selected_tab].cursor_y][(tabs[selected_tab].cursor_x-1)%VGA_WIDTH] == 0)
+        terminal_prompt();
 }
 
 void terminal_scroll_down_buffer()

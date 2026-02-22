@@ -88,7 +88,7 @@ void cmd_help(char **args, int argc)
 {
 	(void)args;
 	(void)argc;
-	terminal_putstr("Available commands:\n");
+	terminal_putstr("\nAvailable commands:\n");
 	terminal_putstr("    help    - Show this message\n");
 	terminal_putstr("    gdt     - Print GDT Table\n");
 	terminal_putstr("    idt     - Print IDT Table\n");
@@ -133,7 +133,7 @@ void cmd_tabs(char **args, int argc)
 	(void)args;
 	(void)argc;
 	extern u8 selected_tab;
-	printk("Current tab: %d / %d\n", selected_tab, TERM_TAB_COUNT);
+	printk("Current tab: %d / %d\n", selected_tab, (TERM_TAB_COUNT - 1));
 }
 
 void cmd_dump(char**args, int argc)

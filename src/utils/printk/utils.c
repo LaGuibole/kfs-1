@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "printk/printk.h"
-#include "term.h"
+#include "shell/term.h"
 
 int	max(int a, int b)
 {

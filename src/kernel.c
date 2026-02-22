@@ -1,4 +1,5 @@
-#include "term.h"
+#include "shell/tabs.h"
+#include "shell/exec.h"
 #include "asm/multiboot.h"
 #include "printk/printk.h"
 #include "dump.h"
@@ -6,7 +7,6 @@
 #include "io.h"
 #include "pic.h"
 #include "idt.h"
-#include "shell.h"
 
 extern void	init_gdt(void);
 extern int kernel_stack_top;
@@ -30,8 +30,8 @@ void kernel_main()
     pic_unmask_irq(1);
 
     __asm__ volatile ("sti");
-    terminal_switch_tab(9);
+    tab_switch(9);
     print_stack_dump();
-    terminal_switch_tab(0);
+    tab_switch(0);
     shell_exec("help");
 }

@@ -36,17 +36,48 @@ void set_gdt_gate(u32 num, u32 base, u32 limit, u8 access, u8 gran)
 	gdt_entries[num].access = access;
 }
 
+static void decode_gdt_entry(u8 *entry, u32 *base, u32 *limit, u8 *type, u8 *dpl, u8 *present)
+{
+    *limit   = (entry[0]) | (entry[1] << 8) | ((entry[6] & 0x0F) << 16);
+    *base    = (entry[2]) | (entry[3] << 8) | (entry[4] << 16) | (entry[7] << 24);
+    *type    = entry[5] & 0x0F;
+    *dpl     = (entry[5] >> 5) & 0x03;
+    *present = (entry[5] >> 7) & 0x01;
+
+    if (entry[6] & 0x80)
+        *limit = (*limit << 12) | 0xFFF;
+}
+
 void print_gdt_dump()
 {
     struct gdt_ptr_struct gdtr_value;
     __asm__ volatile ("sgdt %0" : "=m"(gdtr_value));
-    printk("GDT base: 0x%08x, limit: 0x%04x\n", gdtr_value.base, gdtr_value.limit);
-	u8 *gdt = (u8 *)gdtr_value.base;
-    for (u16 i = 0; i < gdtr_value.limit + 1; i += 8) {
-        printk("GDT[%02d]: ", i / 8);
-        for (int j = 0; j < 8; j++) {
-            printk("%02x ", gdt[i + j]);
-        }
-        printk("\n");
+
+    u8  *gdt     = (u8 *)gdtr_value.base;
+    u16  entries = (gdtr_value.limit + 1) / 8;
+
+    printk("GDT base: 0x%08x  limit: 0x%04x  (%u entries)\n\n",
+           gdtr_value.base, gdtr_value.limit, entries);
+
+    printk("%-5s  %-10s  %-10s  %-6s  %-4s  %-7s  %s\n",
+           "IDX", "BASE", "LIMIT", "TYPE", "DPL", "PRESENT", "RAW");
+    printk("-----  ----------  ----------  ------  ----  -------"
+           "  -----------------------\n");
+
+    for (u16 i = 0; i < entries; i++) {
+        u8  *entry = &gdt[i * 8];
+        u32  base, limit;
+        u8   type, dpl, present;
+
+        decode_gdt_entry(entry, &base, &limit, &type, &dpl, &present);
+
+        printk("[%03u]  0x%08x  0x%08x  0x%02x    %u     %s"
+               "        %02x %02x %02x %02x %02x %02x %02x %02x\n",
+               i,
+               base, limit,
+               type, dpl,
+               present ? "yes" : "no ",
+               entry[0], entry[1], entry[2], entry[3],
+               entry[4], entry[5], entry[6], entry[7]);
     }
 }

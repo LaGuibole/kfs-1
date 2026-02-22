@@ -40,7 +40,7 @@ void init_idt()
 		idt_set_gate(i, (u32)isr_default, 0x0008, 0x8E);
 	// step 3
 	extern void isr_keyboard(void);
-	idt_set_gate(0x21, (u32)isr_keyboard, 0x0008, 0x8E);
+	    idt_set_gate(0x21, (u32)isr_keyboard, 0x0008, 0x8E);
 	//step 4
 	__asm__ volatile("lidt %0" : : "m"(idt_ptr));
 }

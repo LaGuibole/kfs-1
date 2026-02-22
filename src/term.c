@@ -147,12 +147,12 @@ void terminal_initialize()
     terminal_putchar('\n');
     terminal_putstr(" 444444      22222222           OOOOOOOOO    SSSSSSSSS  \n");
     terminal_putstr(" 444444      22222222          OOOOOOOOOOO   SSSSSSSSS  \n");
-    terminal_putstr("444   444   222     222       OOO       OOO SSS        \n");
-    terminal_putstr("444   444           222       OOO       OOO SSS        \n");
-    terminal_putstr("444444444444     222222       OOO       OOO  SSSSSSS   \n");
-    terminal_putstr("444444444444     222222       OOO       OOO   SSSSSSS  \n");
-    terminal_putstr("      444        222          OOO       OOO        SSS \n");
-    terminal_putstr("      444      222            OOO       OOO        SSS \n");
+    terminal_putstr("444   444   222     222       OOO       OOO SSS         \n");
+    terminal_putstr("444   444           222       OOO       OOO SSS         \n");
+    terminal_putstr("444444444444     222222       OOO       OOO  SSSSSSS    \n");
+    terminal_putstr("444444444444     222222       OOO       OOO   SSSSSSS   \n");
+    terminal_putstr("      444        222          OOO       OOO        SSS  \n");
+    terminal_putstr("      444      222            OOO       OOO        SSS  \n");
     terminal_putstr("      444     222222222        OOOOOOOOOOO   SSSSSSSSS  \n");
     terminal_putstr("      444     222222222         OOOOOOOOO    SSSSSSSSS  \n");
     terminal_putchar('\n');

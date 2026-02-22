@@ -51,10 +51,10 @@ void shell_exec(char *input)
 	}
 	buffer[i] = '\0';
 	
-	terminal_putchar('\n');
-
+	
 	if (buffer[0] == '\0')
 	{
+		terminal_putchar('\n');
 		terminal_prompt();
 		return ;
 	}
@@ -62,6 +62,7 @@ void shell_exec(char *input)
 	argc = parse_args(buffer, argv, 32);
 	if (argc == 0)
 	{
+		terminal_putchar('\n');
 		terminal_prompt();
 		return ; 
 	}
@@ -77,7 +78,7 @@ void shell_exec(char *input)
 		}
 		i++;
 	}
-	terminal_putstr("Unknown command: ");
+	terminal_putstr("\nUnknown command: ");
 	terminal_putstr(argv[0]);
 	terminal_putchar('\n');
 	terminal_prompt();
@@ -116,6 +117,7 @@ void cmd_clear(char **args, int argc)
 
 void cmd_echo(char **args, int argc)
 {
+	terminal_putchar('\n');
 	for (int i = 1; i < argc; i++)
 	{
 		terminal_putstr(args[i]);
@@ -127,6 +129,7 @@ void cmd_echo(char **args, int argc)
 
 void cmd_tabs(char **args, int argc)
 {
+	terminal_putchar('\n');
 	(void)args;
 	(void)argc;
 	extern u8 selected_tab;
@@ -135,6 +138,7 @@ void cmd_tabs(char **args, int argc)
 
 void cmd_dump(char**args, int argc)
 {
+	terminal_putchar('\n');
 	(void)args;
 	(void)argc;
 	print_stack_dump();
@@ -142,6 +146,7 @@ void cmd_dump(char**args, int argc)
 
 void cmd_gdt(char **args, int argc)
 {
+	terminal_putchar('\n');
 	(void)args;
 	(void)argc;
 	print_gdt_dump();
@@ -149,6 +154,7 @@ void cmd_gdt(char **args, int argc)
 
 void cmd_idt(char **args, int argc)
 {
+	terminal_putchar('\n');
 	(void)args;
 	(void)argc;
 	print_idt();
@@ -156,6 +162,7 @@ void cmd_idt(char **args, int argc)
 
 void cmd_troll(char **args, int argc)
 {
+	terminal_putchar('\n');
     (void)args; (void)argc;
     terminal_putstr("                    _____\n");
     terminal_putstr("                 ,-'     `._\n");

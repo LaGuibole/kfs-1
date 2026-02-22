@@ -53,7 +53,7 @@ void print_idt(void)
     terminal_putstr("Vec  | Base       | Sel    | Flags | Type\n");
     terminal_putstr("------------------------------------------------------------\n");
 
-    for (int i = 0; i < IDT_ENTRIES && printed < IDT_PRINT_MAX; i++)
+    for (int i = 29; i < IDT_ENTRIES && printed < IDT_PRINT_MAX; i++)
     {
         idt_entry_t *entries = &idt[i];
         u32 base = ((u32)entries->offset_high << 16) | entries->offset_low;

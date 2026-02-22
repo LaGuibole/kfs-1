@@ -1,4 +1,6 @@
 #include "idt.h"
+#include "printk/printk.h"
+#include "term.h"
 
 static idt_entry_t  idt[IDT_ENTRIES];
 static idt_ptr_t    idt_ptr;
@@ -41,4 +43,42 @@ void init_idt()
 	idt_set_gate(0x21, (u32)isr_keyboard, 0x0008, 0x8E);
 	//step 4
 	__asm__ volatile("lidt %0" : : "m"(idt_ptr));
+}
+
+void print_idt(void)
+{
+    int printed = 0;
+
+    terminal_putstr("------------------------------------------------------------\n");
+    terminal_putstr("Vec  | Base       | Sel    | Flags | Type\n");
+    terminal_putstr("------------------------------------------------------------\n");
+
+    for (int i = 0; i < IDT_ENTRIES && printed < IDT_PRINT_MAX; i++)
+    {
+        idt_entry_t *entries = &idt[i];
+        u32 base = ((u32)entries->offset_high << 16) | entries->offset_low;
+
+        if (base == 0)
+            continue;
+
+        const char *type = "UNKNOWN";
+        u8 gate_type = entries->flags & 0x0F;
+        if (gate_type == 0xE)       type = "INT GATE";
+        else if (gate_type == 0xF)  type = "TRAP GATE";
+        else if (gate_type == 0x5)  type = "TASK GATE";
+
+        printk("%3d  | 0x%08x | 0x%04x | 0x%02x  | %s%s\n",
+            i,
+            base,
+            entries->selector,
+            entries->flags,
+            type,
+            (i == 0x21) ? " <-- KEYBOARD" : ""
+        );
+        printed++;
+    }
+
+    if (printed == IDT_PRINT_MAX)
+        terminal_putstr("... limited print, increase IDT_PRINT_MAX to see all 256 entries ! ;)\n");
+    terminal_putstr("------------------------------------------------------------\n");
 }

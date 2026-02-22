@@ -34,4 +34,6 @@ void kernel_main()
     print_stack_dump();
     terminal_switch_tab(0);
     shell_exec("help");
+    for (;;)
+        __asm__ volatile ("hlt");
 }

@@ -3,14 +3,16 @@
 #include "printk/printk.h"
 #include "dump.h"
 #include "gdt.h"
+#include "idt.h"
 
 static const t_cmd g_commands[] = {
 	{ "help", cmd_help },
-	{ "clear", cmd_clear },
-	{ "echo", cmd_echo },
-	{ "tabs", cmd_tabs },
-	{ "dump", cmd_dump },
 	{ "gdt", cmd_gdt },
+	{ "idt", cmd_idt },
+	{ "dump", cmd_dump },
+	{ "echo", cmd_echo },
+	{ "clear", cmd_clear },
+	{ "tabs", cmd_tabs },
 	{ "troll", cmd_troll },
 	{ NULL, NULL },
 };
@@ -87,11 +89,12 @@ void cmd_help(char **args, int argc)
 	(void)argc;
 	terminal_putstr("Available commands:\n");
 	terminal_putstr("    help    - Show this message\n");
-	terminal_putstr("    clear   - Clear current tab\n");
-	terminal_putstr("    echo    - Print arguments\n");
-	terminal_putstr("    tabs    - Show tab info\n");
 	terminal_putstr("    gdt     - Print GDT Table\n");
+	terminal_putstr("    idt     - Print IDT Table\n");
 	terminal_putstr("    dump    - Print Stack Dump\n");
+	terminal_putstr("    echo    - Print arguments\n");
+	terminal_putstr("    clear   - Clear current tab\n");
+	terminal_putstr("    tabs    - Show tab info\n");
 	terminal_putstr("    troll   - Surprise :D\n");
 }
 
@@ -142,6 +145,13 @@ void cmd_gdt(char **args, int argc)
 	(void)args;
 	(void)argc;
 	print_gdt_dump();
+}
+
+void cmd_idt(char **args, int argc)
+{
+	(void)args;
+	(void)argc;
+	print_idt();
 }
 
 void cmd_troll(char **args, int argc)

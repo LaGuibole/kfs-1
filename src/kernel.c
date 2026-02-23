@@ -2,6 +2,7 @@
 #include "shell/exec.h"
 #include "asm/multiboot.h"
 #include "printk/printk.h"
+#include "memory/paging.h"
 #include "dump.h"
 #include "gdt.h"
 #include "io.h"
@@ -21,6 +22,7 @@ extern int kernel_stack_top;
 
 void kernel_main()
 {
+    // paging_init();
     init_gdt();
     terminal_initialize();
     pic_remap(0x20, 0x28);

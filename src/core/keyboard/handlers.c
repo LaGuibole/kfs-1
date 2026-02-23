@@ -11,32 +11,20 @@
 */
 void default_handler()
 {
-    // panic
+    // panic to do
 }
 
-// void keyboard_handler()
-// {
-//     u8 scancode = inb(0x60);
-    
-//     char c = keyboard_scancode_ascii(scancode);
-//     if (c != 0)
-//     {
-//         if (scancode >= KEY_F1 && scancode <= KEY_F10)
-//             tab_switch(c % 0xFFFFFFF0 - 1);    
-//         else if (c == '\b')
-//             terminal_backspace();
-//         else if (c == '\n')
-//         {
-//             shell_exec((char *)tabs[selected_tab].input_buffer);
-//             tabs[selected_tab].input_len = 0;
-//             tabs[selected_tab].input_buffer[0] = '\0';  
-//         }
-//         else
-//             terminal_putchar(c);
-//     }
-//     pic_send_eoi(1); // IRQ1 => send EOI on PIC master
-// }
-
+/*
+    Keyboard Interrupt Handle (mapped on INT 0x21 / 33)
+    Steps : 
+        1 - Read scancode from keyboard I/O port 0x60
+        2 - Convert scancode to ASCII vhar
+        3 - if F1-F10 switch to corresponding tab
+        4 - If backspace : erase
+        5 - If enter : execute buffered cmd
+        6 - Otherwise : append char in buffer
+        7 - Send eoi to PIC
+*/
 void keyboard_handler()
 {
     u8 scancode = inb(0x60);

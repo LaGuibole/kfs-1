@@ -21,8 +21,8 @@ CC          = $(TARGET)-gcc
 AS          = $(TARGET)-as
 LD          = $(TARGET)-ld
 
-KERNEL_OUT  = build/kfs.bin
-ISO_OUT     = build/kfs.iso
+KERNEL_OUT  = build/pedrOS.bin
+ISO_OUT     = build/pedrOS.iso
 LINKER      = src/boot/linker.ld
 
 SRC_C       := $(shell find src -name '*.c')

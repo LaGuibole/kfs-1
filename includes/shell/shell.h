@@ -5,10 +5,10 @@
 #include "types.h"
 #include "vga.h"
 
-#define INPUT_BUFFER_SIZE   242
+#define INPUT_BUFFER_SIZE   246
 
 #define TERM_TAB_COUNT  10
-#define PROMPT          "cgpoulipOS >  "  
+#define PROMPT          "PedrOS >  "  
 
 /* -------------------------- State flags for tabs -------------------------- */
 #define TAB_FLAG_HAS_PROMPT 0b00000001
